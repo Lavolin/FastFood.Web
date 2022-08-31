@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using FastFood.Data;
 using FastFood.Models;
 using FastFood.Web.ViewModels.Positions;

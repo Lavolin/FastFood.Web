@@ -30,6 +30,7 @@ namespace FastFood.Web.Controllers
 
         public IActionResult All()
         {
+            //TODO read all data categories from db and pass it to the View
             throw new NotImplementedException();
         }
     }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using FastFood.Data;
 using FastFood.Web.ViewModels.Items;
 using Microsoft.AspNetCore.Mvc;
