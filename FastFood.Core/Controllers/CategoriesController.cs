@@ -48,7 +48,7 @@ namespace FastFood.Web.Controllers
             ICollection<ListCategoryDto> categoryDtos = await this.categoryService.GetAll();
 
             IList<CategoryAllViewModel> categoryAll = new List<CategoryAllViewModel>();
-            foreach (var cDto in categoryDtos)
+            foreach (ListCategoryDto cDto in categoryDtos)
             {
                 categoryAll.Add(this.mapper.Map<CategoryAllViewModel>(cDto));
             }

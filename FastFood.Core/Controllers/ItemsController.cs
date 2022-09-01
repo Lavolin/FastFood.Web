@@ -1,31 +1,40 @@
-﻿using System;
-using System.Linq;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using FastFood.Data;
-using FastFood.Web.ViewModels.Items;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections;
+using System.Collections.Generic;
+using FastFood.Services.Models.Categories;
 
 namespace FastFood.Web.Controllers
 {
+    using System;
+    using System.Threading.Tasks;
+
+    using AutoMapper;
+
+    using Services.Interfaces;
+    using ViewModels.Items;
+    using Microsoft.AspNetCore.Mvc;
     public class ItemsController : Controller
     {
-        private readonly FastFoodContext context;
+        private readonly ICategoryService categoryService;
         private readonly IMapper mapper;
 
-        public ItemsController(FastFoodContext context, IMapper mapper)
+        public ItemsController(IMapper mapper, ICategoryService categoryService)
         {
-            this.context = context;
             this.mapper = mapper;
+            this.categoryService = categoryService;
         }
 
-        public IActionResult Create()
-        {
-            var categories = this.context.Categories
-                .ProjectTo<CreateItemViewModel>(mapper.ConfigurationProvider)
-                .ToList();
+        public async Task<IActionResult> Create()
+        { 
+            ICollection<ListCategoryDto> categories = await this.categoryService
+                .GetAll();
 
-            return this.View(categories);
+            IList<CreateItemViewModel> itemVmod = new List<CreateItemViewModel>();
+            foreach (var category in categories)
+            {
+                itemVmod.Add(this.mapper.Map<CreateItemViewModel>(category));
+            }
+
+            return this.View(itemVmod);
         }
 
         [HttpPost]
