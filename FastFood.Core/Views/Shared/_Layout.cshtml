@@ -33,7 +33,7 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Positions" asp-action="Create">Position</a></li>
                     <li><a asp-area="" asp-controller="Employees" asp-action="Register">Employee</a></li>
-                    <li><a asp-area="" asp-controller="Categories" asp-action="Create">Category</a></li>
+                    <li><a asp-area="" asp-controller="Categories" asp-action="All">Category</a></li>
                     <li><a asp-area="" asp-controller="Items" asp-action="Create">Item</a></li>
                     <li><a asp-area="" asp-controller="Orders" asp-action="Create">Order</a></li>
                 </ul>
@@ -47,7 +47,8 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2019 - FastFood</p>
+            <p>&copy; FastFood</p>
+            <p>2022 - @DateTime.UtcNow.Year</p>
         </footer>
     </div>
 

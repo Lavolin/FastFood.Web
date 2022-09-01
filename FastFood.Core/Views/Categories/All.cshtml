@@ -13,12 +13,18 @@
         </tr>
     </thead>
     <tbody>
-        @for(var i = 0; i < Model.Count(); i++)
-    {
-        <tr class="row">
-            <th class="col-md-1">@i</th>
-            <td class="col-md-2">@Model[i].Name</td>
-        </tr>
-    }
+        <div class="container-fluid justify-content-center">
+            @for (var i = 0; i < Model.Count(); i++)
+            {
+                <tr class="row">
+                    <th class="col-md-1">@(i + 1)</th>
+                    <td class="col-md-2">@Model[i].Name</td>
+                </tr>
+            }
+        </div>
+        <div class ="container-fluid justify-content-center">
+            <a class="btn btn-success" asp-area="" asp-controller="Categories" asp-action="Create">Create</a>
+        </div>
+
     </tbody>
 </table>

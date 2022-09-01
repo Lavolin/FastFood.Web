@@ -1,4 +1,7 @@
 using FastFood.Data;
+using FastFood.Services;
+using FastFood.Services.Interfaces;
+using FastFood.Web.MappingConfiguration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +27,15 @@ namespace FastFood.Web
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<FastFoodProfile>();
+            });
+
             services.AddControllersWithViews();
+
+            //Register services
+            services.AddTransient<ICategoryService, CategoryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

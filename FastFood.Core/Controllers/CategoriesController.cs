@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using FastFood.Data;
+using FastFood.Services.Interfaces;
+using FastFood.Services.Models.Categories;
 using FastFood.Web.ViewModels.Categories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,13 +12,13 @@ namespace FastFood.Web.Controllers
 {
     public class CategoriesController : Controller
     {
-        private readonly FastFoodContext context;
         private readonly IMapper mapper;
+        private readonly ICategoryService categoryService;
 
-        public CategoriesController(FastFoodContext context, IMapper mapper)
+        public CategoriesController(IMapper mapper, ICategoryService categoryService)
         {
-            this.context = context;
             this.mapper = mapper;
+            this.categoryService = categoryService;
         }
 
         public IActionResult Create()
@@ -23,15 +27,32 @@ namespace FastFood.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreateCategoryInputModel model)
+        public async Task<IActionResult> Create(CreateCategoryInputModel model)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+            {
+                return this.RedirectToAction("Create", "Categories");
+
+            }
+
+            CreateCategoryDto categoryDto = this.mapper.Map<CreateCategoryDto>(model);
+
+            await this.categoryService.Add(categoryDto);
+
+            return this.RedirectToAction("All", "Categories");
         }
 
-        public IActionResult All()
+        public async Task<IActionResult> All()
         {
-            //TODO read all data categories from db and pass it to the View
-            throw new NotImplementedException();
+            //read all data categories from db and pass it to the View
+            ICollection<ListCategoryDto> categoryDtos = await this.categoryService.GetAll();
+
+            IList<CategoryAllViewModel> categoryAll = new List<CategoryAllViewModel>();
+            foreach (var cDto in categoryDtos)
+            {
+                categoryAll.Add(this.mapper.Map<CategoryAllViewModel>(cDto));
+            }
+            return this.View(categoryAll);
         }
     }
 }
