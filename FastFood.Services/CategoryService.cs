@@ -24,7 +24,7 @@ namespace FastFood.Services
         {
             Category category = this.mapper.Map<Category>(categoryDto);
 
-            dbContext.Categories.Add(category);
+            await dbContext.Categories.AddAsync(category);
 
             await dbContext.SaveChangesAsync();
         }
@@ -37,6 +37,13 @@ namespace FastFood.Services
                 .ToArrayAsync();
 
             return result;
+        }
+
+        public async Task<bool> ExistById(int id)
+        {
+            return await this.dbContext
+                .Categories
+                .AnyAsync(c => c.Id == id);
         }
     }
 }

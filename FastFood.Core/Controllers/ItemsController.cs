@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using FastFood.Services.Models.Categories;
+using FastFood.Services.Models.Items;
 
 namespace FastFood.Web.Controllers
 {
@@ -14,13 +15,15 @@ namespace FastFood.Web.Controllers
     using Microsoft.AspNetCore.Mvc;
     public class ItemsController : Controller
     {
-        private readonly ICategoryService categoryService;
         private readonly IMapper mapper;
+        private readonly ICategoryService categoryService;
+        private readonly IItemService itemService;
 
-        public ItemsController(IMapper mapper, ICategoryService categoryService)
+        public ItemsController(IMapper mapper, ICategoryService categoryService, IItemService itemService)
         {
             this.mapper = mapper;
             this.categoryService = categoryService;
+            this.itemService = itemService;
         }
 
         public async Task<IActionResult> Create()
@@ -38,9 +41,24 @@ namespace FastFood.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreateItemInputModel model)
+        public async Task<IActionResult> Create(CreateItemInputModel model)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+            {
+                return this.RedirectToAction("Create", "Items");
+            }
+
+            bool categoryValid = await this.categoryService.ExistById(model.CategoryId);
+            if (!categoryValid)
+            {
+                return this.RedirectToAction("Create", "Items");
+
+            }
+
+            CreateItemDto itemDto = this.mapper.Map<CreateItemDto>(model);
+            await this.itemService.Add(itemDto);
+
+            return this.RedirectToAction("All", "Items");
         }
 
         public IActionResult All()

@@ -1,4 +1,5 @@
 ﻿using FastFood.Services.Models.Categories;
+using FastFood.Services.Models.Items;
 using FastFood.Web.ViewModels.Categories;
 using FastFood.Web.ViewModels.Items;
 
@@ -30,8 +31,10 @@ namespace FastFood.Web.MappingConfiguration
 
             //Item
             this.CreateMap<ListCategoryDto, CreateItemViewModel>()
-                .ForMember(d => d.CategoryId, mo => mo.MapFrom(s => s.Id));
-
+                .ForMember(d => d.CategoryId, mo => mo.MapFrom(s => s.Id))
+                .ForMember(d => d.CategoryName, mo => mo.MapFrom(s => s.Name));
+            this.CreateMap<CreateItemInputModel, CreateItemDto>();
+            this.CreateMap<CreateItemDto, Item>();
         }
     }
 }
