@@ -9,5 +9,6 @@ namespace FastFood.Services.Interfaces
         Task<ICollection<ListCategoryDto>> GetAll();
 
         Task<bool> ExistById(int id);
+        Task<CategoryDetailsDto> GetDetailById(int id);
     }
 }

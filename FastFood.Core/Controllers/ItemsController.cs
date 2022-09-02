@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using FastFood.Models;
 using FastFood.Services.Models.Categories;
 using FastFood.Services.Models.Items;
 
@@ -61,9 +62,17 @@ namespace FastFood.Web.Controllers
             return this.RedirectToAction("All", "Items");
         }
 
-        public IActionResult All()
+        public async Task<IActionResult> All()
         {
-            throw new NotImplementedException();
+            ICollection<ListItemDto> itemDtos = await this.itemService.GetAll();
+
+            IList<ItemsAllViewModels> itemVms = new List<ItemsAllViewModels>();
+            foreach (ListItemDto iDto in itemDtos)
+            {
+                itemVms.Add(this.mapper.Map<ItemsAllViewModels>(iDto));
+            }
+
+            return this.View(itemVms);
         }
     }
 }

@@ -42,6 +42,21 @@ namespace FastFood.Web.Controllers
             return this.RedirectToAction("All", "Categories");
         }
 
+        public async Task<IActionResult> Details(int id)
+        {
+            bool validCategory = await this.categoryService.ExistById(id);
+
+            if(!validCategory)
+            {
+                return this.RedirectToAction("All", "Categories");
+            }
+
+            var categoryDto = await this.categoryService.GetDetailById(id);
+            var categoryVm = mapper.Map<CategoryDetailsViewModel>(categoryDto);
+
+            return this.View(categoryVm);
+        }
+
         public async Task<IActionResult> All()
         {
             //read all data categories from db and pass it to the View

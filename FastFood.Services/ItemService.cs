@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using FastFood.Data;
 using FastFood.Models;
 using FastFood.Services.Interfaces;
 using FastFood.Services.Models.Items;
+using Microsoft.EntityFrameworkCore;
 
 namespace FastFood.Services
 {
@@ -27,7 +29,12 @@ namespace FastFood.Services
 
         public async Task<ICollection<ListItemDto>> GetAll()
         {
-            throw new NotImplementedException();
+            ICollection<ListItemDto> itemDtos = await this.dbContext
+                .Items
+                .ProjectTo<ListItemDto>(this.mapper.ConfigurationProvider)
+                .ToArrayAsync();
+
+            return itemDtos;
         }
     }
 }

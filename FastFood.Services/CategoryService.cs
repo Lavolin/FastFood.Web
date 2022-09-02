@@ -9,17 +9,19 @@ namespace FastFood.Services
     using Data;
     using Interfaces;
     using Models.Categories;
+
     public class CategoryService : ICategoryService
     {
         private readonly FastFoodContext dbContext;
         private readonly IMapper mapper;
 
-        public CategoryService(FastFoodContext dbContext, IMapper mapper) 
+        public CategoryService(FastFoodContext dbContext, IMapper mapper)
         {
             //dependency injection from StartUp!!!
-                this.dbContext = dbContext;
-                this.mapper = mapper;
+            this.dbContext = dbContext;
+            this.mapper = mapper;
         }
+
         public async Task Add(CreateCategoryDto categoryDto)
         {
             Category category = this.mapper.Map<Category>(categoryDto);
@@ -44,6 +46,14 @@ namespace FastFood.Services
             return await this.dbContext
                 .Categories
                 .AnyAsync(c => c.Id == id);
+        }
+
+        public async Task<CategoryDetailsDto> GetDetailById(int id)
+        {
+            return await this.dbContext
+                .Categories
+                .ProjectTo<CategoryDetailsDto>(this.mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
     }
 }
